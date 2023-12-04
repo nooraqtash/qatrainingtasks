@@ -1,4 +1,10 @@
 /// <reference types="cypress" />
+
+declare namespace Cypress {
+  interface Chainable {
+    LogInAPI(): Chainable<any>;
+  }
+}
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
@@ -12,6 +18,17 @@
 //
 // -- This is a parent command --
 // Cypress.Commands.add('login', (email, password) => { ... })
+
+Cypress.Commands.add('LogInAPI', () => {
+    cy.request('GET', 'https://opensource-demo.orangehrmlive.com',
+    {'userEmail': "Admin", 'userPassword': "admin123"}).then(function(response){
+        expect(response.status).to.eq(200)
+        Cypress.env('token',response.body.token)
+    })
+  })
+
+
+
 //
 //
 // -- This is a child command --
