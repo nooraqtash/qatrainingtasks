@@ -23,6 +23,8 @@ class UserManagementPage{
     employeeRow= '.oxd-table-row'
     deleteButton= '.oxd-table-row > :nth-child(6) > .oxd-table-cell-actions > :nth-child(1)'
     deleteConfirmationButton= '.oxd-button--label-danger'
+
+    numOfNthChild = (index) => ':nth-child('+index+')'
 }
 export const userManagement: UserManagementPage = new UserManagementPage()
 

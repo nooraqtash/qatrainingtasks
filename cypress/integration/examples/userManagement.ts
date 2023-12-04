@@ -1,3 +1,4 @@
+import { names } from "../../fixtures/constants/enum.constants"
 import { login } from "../pageObjects/loginPage"
 import { userManagement } from "../pageObjects/userManagmentPage"
 
@@ -5,10 +6,10 @@ describe('User Management Page', () => {
 
     it('Should add user succesfully', () => {
 
-        cy.visit(Cypress.env('baseURL'))
+        cy.visit(Cypress.env('baseURL')) //  loginPage.Url = '/'
         login.logIn(Cypress.env('username'),Cypress.env('correctPassword'))
 
-        cy.visit(Cypress.env('baseURL')+userManagement.systemUsersURL)
+        cy.visit(Cypress.env('baseURL') + userManagement.systemUsersURL)
         //the above could be done by cy.get(userManagement.adminTabMain).click() instead too
 
         cy.get(userManagement.addButton).click()
@@ -20,8 +21,9 @@ describe('User Management Page', () => {
 
         //filling in the user role
         cy.get(userManagement.userFieldDropdownIcon).click().each(($el, index, $list) => {
-                const role = $el.find(userManagement.userRoleFieldAdmin+ ':nth-child('+index+')').text();
-                if (role.includes('Admin')) {
+                const role = $el.find(userManagement.userRoleFieldAdmin + userManagement.numOfNthChild(index));
+                const roleString= role.text()
+                if (roleString.includes('Admin')) {
                     cy.wrap($el).click();
                 }
             })
@@ -34,7 +36,7 @@ describe('User Management Page', () => {
         cy.get(userManagement.nameAutocomplete).each(($el, index, $list) => {
             const name=$el.text()
 
-            if(name.includes('Sania')){
+            if(name.includes(names.randomName)){
                 cy.wrap($el).click()
             }
 
@@ -58,7 +60,7 @@ describe('User Management Page', () => {
             const employeeName=$el.text()
 
             if(employeeName.includes('admin1')){
-                cy.get(':nth-child(' +index + ') > ' +userManagement.deleteButton).click()
+                cy.get(userManagement.numOfNthChild(index)+' > '+userManagement.deleteButton).click()
                 cy.get(userManagement.deleteConfirmationButton).click()
             }
         })
